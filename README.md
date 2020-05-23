@@ -1,29 +1,5 @@
 # jukeboxify
 
-## Project setup
-```
-yarn install
-```
+## Auxless spotify
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://twitter.com/sduduzo_g/status/1263863260169805824
