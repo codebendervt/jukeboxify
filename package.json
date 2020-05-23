@@ -2,9 +2,10 @@
   "name": "jukeboxify",
   "version": "0.1.0",
   "private": true,
+  "main": "server.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "start": "nodemon --exec yarn serve",
+    "dev": "nodemon --exec yarn serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
