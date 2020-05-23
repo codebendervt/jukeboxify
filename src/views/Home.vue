@@ -1,18 +1,32 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="p-12">
+    <h1 class="text-center text-2xl font-bold">Auxless spotify</h1>
+    <div class="flex justify-center">
+      <button
+        @click="startSession"
+        class="bg-blue-500 hover:bg-blue-600 m-4 mr-12 text-white p-4 rounded-full"
+      >
+        Start session
+      </button>
+      <button class="bg-gray-300 hover:bg-gray-400 p-4 m-4 rounded-full">
+        Join session
+      </button>
+    </div>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import router from "@/router";
 
-export default {
+export default defineComponent({
   name: "Home",
-  components: {
-    HelloWorld
+  components: {},
+  setup() {
+    function startSession() {
+      router.push("session");
+    }
+    return { startSession };
   }
-};
+});
 </script>
