@@ -1,15 +1,14 @@
 <template>
   <div>
+    <div>Spotify connected</div>
+    <div>
+      <span>Conenct</span>
+      <a href="/api/spotify/authorize">Here</a>
+    </div>
     <router-link class="p-4 m-4" to="/">Home</router-link>
     <button @click="logout" class="m-4 p-4 rounded-full shadow-md">
       Log out
     </button>
-    <h1 class="text-3xl font-bold p-2">Session</h1>
-    <!-- <button class="bg-blue-500  text-white rounded-full p-4 m-4 shadow-lg"> -->
-    <!-- Link your spotify account -->
-    <!-- </button> -->
-    <button @click="start" class="m-4 p-4 bg-blue-300">Start</button>
-    <button @click="stop" class="m-4 p-4 bg-blue-300">Stop</button>
   </div>
 </template>
 <script lang="ts">
@@ -48,9 +47,7 @@ export default defineComponent({
       router.push("/");
     }
 
-    const { initSession } = useSession();
-
-    return { logout, start: initSession };
+    return { logout };
   }
 });
 </script>
