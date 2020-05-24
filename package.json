@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "dev": "nodemon",
+    "dev": "nodemon -r dotenv/config server.js dotenv_config_path=./.env.local",
     "open": "run-p dev serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
     "firebase": "^7.14.5",
+    "firebase-admin": "^8.12.1",
     "reconnecting-websocket": "^4.4.0",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0-beta.1",
@@ -41,6 +43,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^7.0.0-alpha.0",
+    "http-proxy-middleware": "^1.0.4",
     "node-sass": "^4.12.0",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",

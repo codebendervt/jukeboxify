@@ -1,10 +1,10 @@
 import { createApp } from "vue";
-import firebase from "firebase";
 import App from "./App.vue";
 // import "./registerServiceWorker"; # Eventually this has to be enabled but with a functioning config
 import router from "./router";
 import store from "./store";
 import "./assets/tailwind.css";
+import firebase from "firebase";
 
 const config = {
   apiKey: "AIzaSyAEOLJIn6nJ4A-yYqkpOqCZME3UbVjudPU",

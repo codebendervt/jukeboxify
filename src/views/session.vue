@@ -8,28 +8,36 @@
     <!-- <button class="bg-blue-500  text-white rounded-full p-4 m-4 shadow-lg"> -->
     <!-- Link your spotify account -->
     <!-- </button> -->
+    <button @click="start" class="m-4 p-4 bg-blue-300">Start</button>
+    <button @click="stop" class="m-4 p-4 bg-blue-300">Stop</button>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onUnmounted } from "vue";
+import { defineComponent, onUnmounted, onDeactivated } from "vue";
 import firebase from "firebase";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import router from "@/router";
 
-async function useSession() {
+function useSession() {
   async function urlProvider() {
     const user = firebase.auth().currentUser;
     if (!user) throw Error("user isn't authenticated mara why?");
     const idToken = await user?.getIdToken();
     const socketScheme = window.location.protocol === "http:" ? "ws:" : "wss:";
-    return `${socketScheme}//${window.location.host}/ws/session`;
+    return `${socketScheme}//${window.location.host}/ws/session?token=${idToken}`;
   }
-  const rws = new ReconnectingWebSocket(urlProvider);
-  rws.onopen = () => {
-    console.log("connection opened");
-  };
-  onUnmounted(rws.close);
-  return {};
+
+  function init() {
+    const rws = new ReconnectingWebSocket(urlProvider);
+    rws.onopen = () => {
+      console.log("connection opened");
+    };
+    onDeactivated(() => rws?.close());
+    onUnmounted(() => rws?.close());
+    console.log("initialising session");
+  }
+
+  return { initSession: init };
 }
 
 export default defineComponent({
@@ -38,7 +46,10 @@ export default defineComponent({
       await firebase.auth().signOut();
       router.push("/");
     }
-    return { logout, ...useSession() };
+
+    const { initSession } = useSession();
+
+    return { logout, start: initSession };
   }
 });
 </script>

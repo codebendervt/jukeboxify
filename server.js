@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { resolve } = require("path");
 const express = require("express");
-const config = require("./api/config");
+const config = require("./config");
 const app = express();
 
 const { PORT = 3000 } = process.env;
