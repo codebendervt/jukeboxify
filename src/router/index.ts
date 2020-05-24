@@ -6,13 +6,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: () => import("../views/Home.vue")
+    component: () => import("../views/home.vue")
   },
   {
     path: "/login",
     name: "Login",
-    component: () =>
-      import(/* webpackChunkName: "login" */ "../views/login.vue")
+    component: () => import("../views/login.vue")
+  },
+  {
+    path: "/connect",
+    name: "Connect",
+    component: () => import("../views/connect.vue"),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/session",

@@ -20,31 +20,31 @@ function useAuth() {
   const loading = ref(false);
 
   async function ininApp() {
-    loading.value = true;
-    const result = await firebase.auth().getRedirectResult();
-    loading.value = false;
-    if (!result) return;
-  }
-  onMounted(() => {
-    ininApp();
-  });
-  return { loading };
-}
-
-export default defineComponent({
-  setup() {
-    firebase.auth().onAuthStateChanged(async user => {
-      console.log(user?.displayName + " is signed in");
+    firebase.auth().onAuthStateChanged(async () => {
       const route = router.currentRoute.value;
       if (route.query.returnUrl) {
         router.push(route.query.returnUrl as string);
       } else router.push("/");
     });
-    function login() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithRedirect(provider);
-    }
-    return { login, ...useAuth() };
+    loading.value = true;
+    const result = await firebase.auth().getRedirectResult();
+    loading.value = false;
+    if (!result) return;
+  }
+
+  function login() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
+  }
+  onMounted(() => {
+    ininApp();
+  });
+  return { loading, login };
+}
+
+export default defineComponent({
+  setup() {
+    return { ...useAuth() };
   }
 });
 </script>

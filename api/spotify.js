@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const express = require("express");
+const axios = require("axios").default;
 const queryString = require("querystring");
 const { URL, URLSearchParams } = require("url");
 
@@ -29,7 +30,9 @@ router.get("/authorize", (req, res) => {
   const scope =
     "user-read-playback-state" +
     " user-modify-playback-state" +
-    " user-read-private";
+    " user-read-private" +
+    " streaming" +
+    " user-read-email";
   const url = new URL("https://accounts.spotify.com/authorize");
   const params = {
     response_type: "code",
@@ -46,6 +49,7 @@ router.get("/callback", async (req, res) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
+
   if (state === null && storedState !== state) {
     res.redirect(
       "/" +
@@ -69,41 +73,33 @@ router.get("/callback", async (req, res) => {
       },
       json: true
     };
+    try {
+      const { data } = await axios.post(
+        url,
+        queryString.stringify({
+          code,
+          redirect_uri: redirectUrl,
+          grant_type: "authorization_code"
+        }),
+        {
+          headers: {
+            Authorization:
+              "Basic " +
+              new Buffer(clientId + ":" + clientSecret).toString("base64")
+          }
+        }
+      );
 
-    const request = require("request");
-    request.post(authOptions, (error, response, body) => {
-      if (!error && response.statusCode === 200) {
-        const access_token = body.access_token,
-          refresh_token = body.refresh_token;
+      const results = {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        expires_in: data.expires_in
+      };
 
-        const options = {
-          url: "https://api.spotify.com/v1/me",
-          headers: { Authorization: "Bearer " + access_token },
-          json: true
-        };
-
-        // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
-
-        // we can also pass the token to the browser to make requests from there
-        res.redirect(
-          "/#" +
-            queryString.stringify({
-              access_token: access_token,
-              refresh_token: refresh_token
-            })
-        );
-      } else {
-        res.redirect(
-          "/#" +
-            queryString.stringify({
-              error: "invalid_token"
-            })
-        );
-      }
-    });
+      return res.redirect("/connect?" + queryString.stringify(results));
+    } catch (e) {
+      return res.redirect("/#" + queryString.stringify({ error: e }));
+    }
   }
 });
 

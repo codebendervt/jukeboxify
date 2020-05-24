@@ -7,7 +7,7 @@ const expressWs = require("express-ws");
 const session = require("./session");
 
 module.exports = application => {
-  const app = expressWs(application, null, {
+  const instance = expressWs(application, null, {
     wsOptions: {
       verifyClient: async ({ req }, done) => {
         try {
@@ -23,7 +23,8 @@ module.exports = application => {
         }
       }
     }
-  }).app;
+  });
+  const app = instance.app;
   app.ws("/ws/session", session);
   return app;
 };
