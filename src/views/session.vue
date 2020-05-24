@@ -14,7 +14,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, onUnmounted, onDeactivated } from "vue";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import router from "@/router";
 

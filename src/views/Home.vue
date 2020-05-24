@@ -18,13 +18,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import router from "@/router";
+import store from "@/store";
 
 export default defineComponent({
   name: "Home",
   components: {},
   setup() {
     function startSession() {
-      router.push("session");
+      if (store.state.spotifyRefreshToken) {
+        console.log(store.state.spotifyRefreshToken);
+      }
     }
     return { startSession };
   }
