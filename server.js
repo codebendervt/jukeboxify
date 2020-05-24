@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { resolve } = require("path");
 const express = require("express");
+const history = require("connect-history-api-fallback");
 const config = require("./config");
 const app = express();
 
@@ -10,6 +11,7 @@ config(app);
 
 const publicPath = resolve(__dirname, "./dist");
 const staticConf = { maxAge: "1y", etag: false };
+app.use(history());
 app.use(express.static(publicPath, staticConf));
 
 app.listen(PORT, err => {
