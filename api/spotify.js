@@ -21,10 +21,13 @@ function generateRandomString(length) {
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const stateKey = "spotify_auth_state";
-const redirectUrl = "http://localhost:8080/api/spotify/callback";
 
 router.get("/authorize", (req, res) => {
+  console.log(req.connection.remoteAddress);
   const state = generateRandomString(16);
+  const baseUrl =
+    process.env.NODE_ENV === "production" ? req.host : "localhost:8080";
+  const redirectUrl = req.protocol + "://" + baseUrl + "/api/spotify/callback";
   res.cookie(stateKey, state);
 
   const scope =
@@ -46,6 +49,10 @@ router.get("/authorize", (req, res) => {
 });
 
 router.get("/callback", async (req, res) => {
+  const baseUrl =
+    process.env.NODE_ENV === "production" ? req.host : "localhost:8080";
+  const redirectUrl = req.protocol + "://" + baseUrl + "/api/spotify/callback";
+
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
